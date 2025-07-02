@@ -1,0 +1,7 @@
+services:
+  web: # Define the 'web' service
+    build: . # Build the image from the current directory (where the Dockerfile is located)
+    ports:
+      - "3000:3000" # Map port 8000 on the host to port 8000 in the container
+    volumes:
+      - "D:/:/drive" # Mount the current directory into the container's /app directory
