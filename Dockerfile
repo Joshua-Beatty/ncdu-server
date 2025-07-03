@@ -24,11 +24,11 @@ RUN cd frontend && npm install
 # Copy frontend source code
 COPY frontend/ ./frontend/
 
+# Build the application
+RUN cd frontend && npm install
+
 # Copy any remaining root files (if any)
 COPY . .
-
-# Build the application
-RUN npm run build
 
 EXPOSE 3000
 ENV PORT=3000
