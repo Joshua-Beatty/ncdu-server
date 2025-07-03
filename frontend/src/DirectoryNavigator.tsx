@@ -93,21 +93,21 @@ export default function DirectoryNavigator({ directory }: { directory: Directory
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <p className="text-sm text-muted-foreground">Allocated Size</p>
+                <p className="text-sm text-muted-foreground">Apparent Size</p>
                 <p className="font-medium">{formatSize(dirInfo.asize)}</p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Data Size</p>
+                <p className="text-sm text-muted-foreground">Disk Size</p>
                 <p className="font-medium">{formatSize(dirInfo.dsize)}</p>
               </div>
               {'asizeTotal' in dirInfo && (
                 <>
                   <div>
-                    <p className="text-sm text-muted-foreground">Total Allocated</p>
+                    <p className="text-sm text-muted-foreground">Total Apparent</p>
                     <p className="font-medium">{formatSize(dirInfo.asizeTotal)}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Total Data</p>
+                    <p className="text-sm text-muted-foreground">Total Disk</p>
                     <p className="font-medium">{formatSize(dirInfo.dsizeTotal)}</p>
                   </div>
                 </>
@@ -135,8 +135,8 @@ export default function DirectoryNavigator({ directory }: { directory: Directory
                       <TableRow>
                         <TableHead className="min-w-0 w-1/2">Name</TableHead>
                         <TableHead className="whitespace-nowrap">Type</TableHead>
-                        <TableHead className="whitespace-nowrap">Allocated Size</TableHead>
-                        <TableHead className="whitespace-nowrap">Data Size</TableHead>
+                        <TableHead className="whitespace-nowrap">Apparent Size</TableHead>
+                        <TableHead className="whitespace-nowrap">Disk Size</TableHead>
                         <TableHead className="whitespace-nowrap">% of Directory</TableHead>
                       </TableRow>
                     </TableHeader>
