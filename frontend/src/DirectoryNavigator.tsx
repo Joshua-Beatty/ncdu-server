@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import type { DirectoryParsed } from "./utils/parseDirectory";
 import { Folder, File, ArrowLeft, HardDrive } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,15 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Progress } from "./components/ui/progress";
-
-type Directory = [
-  {
-    name: string;
-    asize?: number;
-    dsize?: number;
-  },
-  ...(Directory | File)[]
-];
 
 export default function DirectoryNavigator({ directory }: { directory: DirectoryParsed }) {
   const [currentPath, setCurrentPath] = useState<number[]>([]);
@@ -98,7 +89,7 @@ export default function DirectoryNavigator({ directory }: { directory: Directory
         <div className="w-80 flex-shrink-0">
           <Card>
             <CardHeader>
-              <CardTitle>{dirInfo.name}</CardTitle>
+              <CardTitle className="break-all">{dirInfo.name}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
@@ -126,7 +117,7 @@ export default function DirectoryNavigator({ directory }: { directory: Directory
         </div>
         
         {/* Right Content - Table */}
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           <Card>
             <CardHeader>
               <CardTitle>Contents</CardTitle>
@@ -138,87 +129,91 @@ export default function DirectoryNavigator({ directory }: { directory: Directory
                   <p>This directory is empty</p>
                 </div>
               ) : (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Type</TableHead>
-                      <TableHead>Allocated Size</TableHead>
-                      <TableHead>Data Size</TableHead>
-                      <TableHead>% of Directory</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {currentPath.length > 0 && (
-                      <TableRow
-                        className="cursor-pointer hover:bg-muted/50"
-                        onClick={navigateBack}
-                      >
-                        <TableCell className="font-medium">
-                          <div className="flex items-center gap-2">
-                            <ArrowLeft className="h-4 w-4 text-muted-foreground" />
-                            ../
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline">Parent</Badge>
-                        </TableCell>
-                        <TableCell>-</TableCell>
-                        <TableCell>-</TableCell>
-                        <TableCell>-</TableCell>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="min-w-0 w-1/2">Name</TableHead>
+                        <TableHead className="whitespace-nowrap">Type</TableHead>
+                        <TableHead className="whitespace-nowrap">Allocated Size</TableHead>
+                        <TableHead className="whitespace-nowrap">Data Size</TableHead>
+                        <TableHead className="whitespace-nowrap">% of Directory</TableHead>
                       </TableRow>
-                    )}
-                    {sortedItems.map((item, index) => {
-                      const isDirectory = Array.isArray(item);
-                      const itemInfo = isDirectory ? item[0] : item;
-                      const percentage = getPercentage(item as any);
-                      
-                      return (
+                    </TableHeader>
+                    <TableBody>
+                      {currentPath.length > 0 && (
                         <TableRow
-                          key={index}
-                          className={isDirectory ? 'cursor-pointer hover:bg-muted/50' : ''}
-                          onClick={() => isDirectory && navigateToDirectory(items.indexOf(item))}
+                          className="cursor-pointer hover:bg-muted/50"
+                          onClick={navigateBack}
                         >
-                          <TableCell className="font-medium">
+                          <TableCell className="font-medium min-w-0">
                             <div className="flex items-center gap-2">
-                              {isDirectory ? (
-                                <Folder className="h-4 w-4 text-blue-500" />
-                              ) : (
-                                <File className="h-4 w-4 text-muted-foreground" />
-                              )}
-                              {itemInfo.name}
+                              <ArrowLeft className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                              <span className="break-all">../</span>
                             </div>
                           </TableCell>
                           <TableCell>
-                            <Badge variant={isDirectory ? 'default' : 'secondary'}>
-                              {isDirectory ? 'Directory' : 'File'}
-                            </Badge>
+                            <Badge variant="outline">Parent</Badge>
                           </TableCell>
-                          <TableCell>
-                            {isDirectory && 'asizeTotal' in itemInfo 
-                              ? formatSize(itemInfo.asizeTotal as any) 
-                              : formatSize(itemInfo.asize)
-                            }
-                          </TableCell>
-                          <TableCell>
-                            {isDirectory && 'dsizeTotal' in itemInfo 
-                              ? formatSize(itemInfo.dsizeTotal as any) 
-                              : formatSize(itemInfo.dsize)
-                            }
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-2">
-                              <Progress value={percentage} className="w-20 [&>div]:transition-none" />
-                              <span className="text-sm text-muted-foreground min-w-12">
-                                {percentage.toFixed(1)}%
-                              </span>
-                            </div>
-                          </TableCell>
+                          <TableCell>-</TableCell>
+                          <TableCell>-</TableCell>
+                          <TableCell>-</TableCell>
                         </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
+                      )}
+                      {sortedItems.map((item, index) => {
+                        const isDirectory = Array.isArray(item);
+                        const itemInfo = isDirectory ? item[0] : item;
+                        const percentage = getPercentage(item as any);
+                        
+                        return (
+                          <TableRow
+                            key={index}
+                            className={isDirectory ? 'cursor-pointer hover:bg-muted/50' : ''}
+                            onClick={() => isDirectory && navigateToDirectory(items.indexOf(item))}
+                          >
+                            <TableCell className="font-medium min-w-0">
+                              <div className="flex items-center gap-2">
+                                {isDirectory ? (
+                                  <Folder className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                                ) : (
+                                  <File className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                                )}
+                                <span className="break-all min-w-0" title={itemInfo.name}>
+                                  {itemInfo.name}
+                                </span>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant={isDirectory ? 'default' : 'secondary'}>
+                                {isDirectory ? 'Directory' : 'File'}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="whitespace-nowrap">
+                              {isDirectory && 'asizeTotal' in itemInfo 
+                                ? formatSize(itemInfo.asizeTotal as any) 
+                                : formatSize(itemInfo.asize)
+                              }
+                            </TableCell>
+                            <TableCell className="whitespace-nowrap">
+                              {isDirectory && 'dsizeTotal' in itemInfo 
+                                ? formatSize(itemInfo.dsizeTotal as any) 
+                                : formatSize(itemInfo.dsize)
+                              }
+                            </TableCell>
+                            <TableCell className="whitespace-nowrap">
+                              <div className="flex items-center gap-2">
+                                <Progress value={percentage} className="w-20 [&>div]:transition-none" />
+                                <span className="text-sm text-muted-foreground min-w-12">
+                                  {percentage.toFixed(1)}%
+                                </span>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
               )}
             </CardContent>
           </Card>
