@@ -178,8 +178,8 @@ export default function DirectoryNavigator({ directory }: { directory: Directory
                                 ) : (
                                   <File className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                                 )}
-                                <span className="break-all min-w-0" title={itemInfo.name}>
-                                  {itemInfo.name}
+                                <span className="break-all min-w-0" title={truncateString(itemInfo.name)}>
+                                  {truncateString(itemInfo.name)}
                                 </span>
                               </div>
                             </TableCell>
@@ -222,3 +222,7 @@ export default function DirectoryNavigator({ directory }: { directory: Directory
     </div>
   );
 }
+
+const truncateString = (str: string): string => {
+  return str.length > 80 ? str.substring(0, 80) + '...' : str;
+};
