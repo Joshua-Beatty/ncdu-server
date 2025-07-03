@@ -224,5 +224,5 @@ export default function DirectoryNavigator({ directory }: { directory: Directory
 }
 
 const truncateString = (str: string): string => {
-  return str.length > 80 ? str.substring(0, 80) + '...' : str;
+  return str.length > 50 ? str.substring(0, 50) + '...' : str;
 };
