@@ -20,7 +20,7 @@ services:
   web:
     image: joshuatb6/ncdu-server:latest
     volumes:
-      - /storage:/drive # Mount the drive to explore at /drive
+      - /storage:/drive # Mount the folder or drive to explore at /drive
 
 ```
 
