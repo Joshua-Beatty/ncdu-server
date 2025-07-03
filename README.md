@@ -1,69 +1,56 @@
-# React + TypeScript + Vite
+# ncdu-server
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web-based disk usage analyzer powered by [ncdu](https://dev.yorhel.nl/ncdu), Node.js, and React. Scan and explore disk usage on a mounted drive from your browser, with a modern, interactive UI and real-time progress updates.
 
-Currently, two official plugins are available:
+## Running with Docker Compose
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```yaml
+services:
+  auth:
+    image: beevelop/nginx-basic-auth
+    ports:
+      - "3000:80"
+    environment:
+      - HTPASSWD=foo:$$apr1$$odHl5EJN$$KbxMfo86Qdve2FH4owePn. # Change this
+      - FORWARD_HOST=web
+      - FORWARD_PORT=3000
+    depends_on:
+      - web
+  web:
+    build:
+      context: https://github.com/Joshua-Beatty/ncdu-server.git
+    pull_policy: build
+    volumes:
+      - /storage:/drive
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Changing the login (htpasswd)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- The default is `foo:bar` (but you should change it!)
+- To make your own, run:
+  ```sh
+  docker run --rm httpd:2.4 htpasswd -nbB youruser yourpass
+  ```
+- Copy the output and replace the `HTPASSWD` line in `docker-compose.yaml`:
+  ```yaml
+  environment:
+    - HTPASSWD=youruser:yourhashedpass
+  ```
+  - Remember to escape each '$' in the output by replacing them with '$$'
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+
+## How it works
+
+- Click **Start Drive Scan** in the web UI
+- Watch real-time progress as `ncdu` scans the mounted drive
+- When it's done, browse directories, and drill down interactively
+
+
+## Project Structure
+
+```
+backend/    # Express server, spawns ncdu, serves API
+frontend/   # React app (Vite, Tailwind, Radix UI)
+Dockerfile  # Multi-stage build for backend/frontend
 ```

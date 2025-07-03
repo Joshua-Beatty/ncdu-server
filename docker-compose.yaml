@@ -1,7 +1,17 @@
 services:
-  web:
-    build: .
+  auth:
+    image: beevelop/nginx-basic-auth
     ports:
-      - "3000:3000" 
+      - "3000:80"
+    environment:
+      - HTPASSWD=foo:$$apr1$$odHl5EJN$$KbxMfo86Qdve2FH4owePn. # Change this
+      - FORWARD_HOST=web
+      - FORWARD_PORT=3000
+    depends_on:
+      - web
+  web:
+    build:
+      context: https://github.com/Joshua-Beatty/ncdu-server.git
+    pull_policy: build
     volumes:
-      - "D:/:/drive"
+      - /storage:/drive
