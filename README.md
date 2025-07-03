@@ -41,7 +41,7 @@ services:
 
 ## How it works
 
-- Click **Start Drive Scan** in the web UI
+- Open the web UI
 - Watch real-time progress as `ncdu` scans the mounted drive
 - When it's done, browse directories, and drill down interactively
 
