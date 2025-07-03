@@ -7,7 +7,9 @@
   },
   "devDependencies": {},
   "scripts": {
-    "postinstall": "cd backend && npm install && cd ../frontend && npm install"
+    "postinstall": "cd backend && npm install && cd ../frontend && npm install",
+    "build": "cd frontend && npm run build",
+    "start":  "cd backend && npm start"
   },
   "repository": {
     "type": "git",
