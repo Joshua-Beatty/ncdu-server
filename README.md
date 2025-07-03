@@ -18,9 +18,7 @@ services:
     depends_on:
       - web
   web:
-    build:
-      context: https://github.com/Joshua-Beatty/ncdu-server.git
-    pull_policy: build
+    image: joshuatb6/ncdu-server:latest
     volumes:
       - /storage:/drive # Mount the drive to explore at /drive
 
