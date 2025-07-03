@@ -9,9 +9,12 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@lydell/node-pty": "^1.1.0",
     "@types/express": "^5.0.3",
+    "@types/express-sse": "^0.5.1",
     "backend": "^0.0.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "strip-ansi": "^7.1.0"
   },
   "volta": {
     "node": "24.3.0"

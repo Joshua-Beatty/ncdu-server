@@ -1,35 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import { Button } from "./components/ui/button";
+import { Card } from "./components/ui/card";
+import useStartScan from "./utils/useStartScan";
+import DirectoryBrowser from "./DirectoryBrowser";
+// import reactLogo from './assets/react.svg'
+// import viteLogo from '/vite.svg'
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [started, setStarted] = useState(false);
+  const { data, err, start, isDone } = useStartScan();
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {!isDone && (
+        <div className="flex justify-center items-center w-full h-screen p-4">
+          <Card className="flex flex-col justify-center items-center min-w-6/12 min-h-3/12 p-4">
+            {!started && (
+              <Button
+                onClick={() => {
+                  setStarted(true);
+                  start();
+                }}
+              >
+                Start Drive Scan
+              </Button>
+            )}
+            {started && !isDone && <pre className="w-full">{data}</pre>}
+            {err && JSON.stringify(err)}
+          </Card>
+        </div>
+      )}
+      {isDone && <DirectoryBrowser />}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
