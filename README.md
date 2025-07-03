@@ -1,7 +1,7 @@
 # ncdu-server
 
 A web-based disk usage analyzer powered by [ncdu](https://dev.yorhel.nl/ncdu), Node.js, and React. Scan and explore disk usage on a mounted drive from your browser, with a modern, interactive UI.
-![Screenshot of the web UI](./assets/image.png)
+![Screenshot of the web UI Drive Navigator](./assets/image.png Screenshot)
 
 ## Recommended Docker Compose Setup
 
@@ -22,7 +22,7 @@ services:
       context: https://github.com/Joshua-Beatty/ncdu-server.git
     pull_policy: build
     volumes:
-      - /storage:/drive
+      - /storage:/drive # Mount the drive to explore at /drive
 
 ```
 
